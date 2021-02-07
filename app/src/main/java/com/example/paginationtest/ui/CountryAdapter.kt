@@ -4,15 +4,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.paginationtest.R
 import com.example.paginationtest.model.Country
+import com.example.paginationtest.ui.diffUtil.CountryDiffCallback
 
 class CountryAdapter : RecyclerView.Adapter<CountryViewHolder>() {
     private var list = mutableListOf<Country>()
 
-    fun setCountries(list: MutableList<Country>) {
-        this.list = list
+    fun setCountries(newList: MutableList<Country>) {
+        val result = DiffUtil.calculateDiff(CountryDiffCallback(list, newList))
+
+        list.clear()
+        list = newList
+
+        result.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
